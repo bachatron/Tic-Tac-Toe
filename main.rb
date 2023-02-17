@@ -1,3 +1,5 @@
+require "./module.rb"
+
 class Board
 
   attr_accessor :empty_board, :game_over
@@ -15,46 +17,57 @@ class Board
     "
   end
 
-  def check_winner(symbol)
-    if @empty_board[0..2] == symbol ||
-       @empty_board[3..5] == symbol || 
-       @empty_board[6..8] == symbol ||
-       @empty_board[0] == symbol && @empty_board[4] == symbol && @empty_board[8] == symbol ||
-       @empty_board[6] == symbol && @empty_board[4] == symbol && @empty_board[2] == symbol ||
-       @empty_board[0] == symbol && @empty_board[3] == symbol && @empty_board[6] == symbol ||
-       @empty_board[1] == symbol && @empty_board[4] == symbol && @empty_board[7] == symbol ||
-       @empty_board[2] == symbol && @empty_board[5] == symbol && @empty_board[8] == symbol
-        @game_over = true
-        puts "Player #{symbol} won."
+  def check_winner(player)
+    if win_condition(@empty_board, player.icon)
+      puts "#{player.name} win."
+      @game_over = true
     end
   end
-
+  
 end
 
 class Player
 
-  attr_reader :name, :symbol
+  attr_reader :name, :icon
 
-  def initialize(name, symbol)
-    @name = name
-    @symbol = symbol
+  def initialize(number)
+    @name = "Player #{number}"
+    @icon = get_icon
   end
 
-  def make_play(board, move)
-    board[move-1] = @symbol
+  def make_a_play(board, move)
+    board[move.to_i - 1] = @icon
+  end
+
+  def get_icon
+    puts "What icon will you use?"
+    icon = gets.chomp
+    until icon.length == 1
+      puts "Please just 1 character"
+      icon = gets.chomp
+    end
+    icon
   end
 
 end
 
-
-new_board.show_board
-player1 = Player.new("bach", "B")
-player1.make_play(new_board.empty_board, 1)
-player1.make_play(new_board.empty_board, 5)
-player1.make_play(new_board.empty_board, 9)
-new_board.show_board
-new_board.check_winner(player1.symbol)
-
-def play
+def play()
+  p1 = Player.new(1)
+  p2 = Player.new(2)
   new_board = Board.new
-  players = []
+  new_board.show_board
+  until new_board.game_over
+    puts "#{p1.name} select where to move"
+    p1.make_a_play(new_board.empty_board, gets.chomp)
+    new_board.show_board
+    new_board.check_winner(p1)
+    break if new_board.game_over
+    puts "#{p2.name} select where to move"
+    p2.make_a_play(new_board.empty_board, gets.chomp)
+    new_board.show_board
+    new_board.check_winner(p2)
+  end
+end
+
+play()
+    
