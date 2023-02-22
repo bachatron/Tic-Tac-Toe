@@ -36,11 +36,15 @@ class Player
   end
 
   def make_a_play(board, move)
-    board[move.to_i - 1] = @icon
+    if Array(1..9).include?(move.to_i)
+      board[move.to_i - 1] = @icon
+    else
+      puts 'Invalid move'
+    end
   end
 
   def get_icon
-    puts "What icon will you use?"
+    puts "#{@name} what icon will you use?"
     icon = gets.chomp
     until icon.length == 1
       puts "Please just 1 character"
