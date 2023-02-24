@@ -5,7 +5,7 @@ class Board
   attr_accessor :empty_board, :game_over
 
   def initialize
-    @empty_board = Array(1..10)
+    @empty_board = Array(1..9)
     @game_over = false
   end
 
@@ -21,6 +21,9 @@ class Board
     if win_condition(@empty_board, player.icon)
       puts "#{player.name} win."
       @game_over = true
+    elsif tie_condition(@empty_board)
+      puts "It's a tie."
+      @game_over = true
     end
   end
   
@@ -35,12 +38,8 @@ class Player
     @icon = get_icon
   end
 
-  def make_a_play(board, move)
-    if Array(1..9).include?(move.to_i)
-      board[move.to_i - 1] = @icon
-    else
-      puts 'Invalid move'
-    end
+  def make_a_play(board)
+    move_condition(board, @icon)
   end
 
   def get_icon
@@ -62,12 +61,12 @@ def play()
   new_board.show_board
   until new_board.game_over
     puts "#{p1.name} select where to move"
-    p1.make_a_play(new_board.empty_board, gets.chomp)
+    p1.make_a_play(new_board.empty_board)
     new_board.show_board
     new_board.check_winner(p1)
     break if new_board.game_over
     puts "#{p2.name} select where to move"
-    p2.make_a_play(new_board.empty_board, gets.chomp)
+    p2.make_a_play(new_board.empty_board)
     new_board.show_board
     new_board.check_winner(p2)
   end

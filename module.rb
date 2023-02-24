@@ -4,3 +4,18 @@ def win_condition(array, icon)
     array.values_at(comb[0], comb[1], comb[2]) == [icon, icon, icon]
   end
 end
+
+def tie_condition(board)
+  board.all?(String)
+end
+
+def move_condition(board, icon)
+  loop do
+    move = gets.chomp.to_i
+    if Array(1..9).include?(move) && board[move-1] == move
+      board[move-1] = icon
+      break
+    end
+    puts 'Invalid input. Select a valid position.'
+  end
+end
