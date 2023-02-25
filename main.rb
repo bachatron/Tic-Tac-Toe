@@ -1,4 +1,4 @@
-require "./module.rb"
+require "./conditions.rb"
 
 class Board
 
@@ -29,6 +29,9 @@ class Board
   
 end
 
+
+
+
 class Player
 
   attr_reader :name, :icon
@@ -39,17 +42,23 @@ class Player
   end
 
   def make_a_play(board)
+    puts "#{@name} select where to move"
     move_condition(board, @icon)
   end
 
   def get_icon
     puts "#{@name} what icon will you use?"
     icon = gets.chomp
-    until icon.length == 1
-      puts "Please just 1 character"
+    until icon.length == 1 && ('a'..'z').include?(icon.downcase)
+      puts "Icon must be a 1 letter."
       icon = gets.chomp
     end
     icon
+  end
+
+  def test(board)
+    board.show_board
+    puts "TEST"
   end
 
 end
@@ -58,17 +67,10 @@ def play()
   p1 = Player.new(1)
   p2 = Player.new(2)
   new_board = Board.new
-  new_board.show_board
   until new_board.game_over
-    puts "#{p1.name} select where to move"
-    p1.make_a_play(new_board.empty_board)
-    new_board.show_board
-    new_board.check_winner(p1)
+    player_actions(new_board, p1)
     break if new_board.game_over
-    puts "#{p2.name} select where to move"
-    p2.make_a_play(new_board.empty_board)
-    new_board.show_board
-    new_board.check_winner(p2)
+    player_actions(new_board, p2)
   end
 end
 

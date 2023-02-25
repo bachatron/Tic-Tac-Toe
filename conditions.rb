@@ -19,3 +19,11 @@ def move_condition(board, icon)
     puts 'Invalid input. Select a valid position.'
   end
 end
+
+def player_actions(board, player)
+  board.show_board
+  player.make_a_play(board.empty_board)
+  board.check_winner(player)
+  print "\e[2J\e[f" unless board.game_over
+end
+
